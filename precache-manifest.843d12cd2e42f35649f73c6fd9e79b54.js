@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "250f078526793f4b1dd7c8eefda38215",
+    "revision": "ca6ff451dd64299040e43e9d6e47dda8",
     "url": "/lumi/index.html"
   },
   {
@@ -32,8 +32,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/lumi/static/js/5.3521a136.chunk.js"
   },
   {
-    "revision": "074bf116fa5a8a9baefe",
-    "url": "/lumi/static/js/main.08ece5a9.chunk.js"
+    "revision": "7f15b53ac93d029a5bce",
+    "url": "/lumi/static/js/main.f50c1496.chunk.js"
   },
   {
     "revision": "ae92c2b385cf58f0ec1a",
