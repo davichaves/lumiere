@@ -18,15 +18,12 @@ import { NotFoundPage } from './components/NotFoundPage/Loadable';
 export function App() {
   return (
     <>
-      <Helmet
-        titleTemplate="%s - React Boilerplate"
-        defaultTitle="React Boilerplate"
-      >
+      <Helmet titleTemplate="%s - Lumiere" defaultTitle="React Boilerplate">
         <meta name="description" content="A React Boilerplate application" />
       </Helmet>
 
       <Switch>
-        <Route exact path="/" component={HomePage} />
+        <Route exact path="/lumiere" component={HomePage} />
         <Route component={NotFoundPage} />
       </Switch>
       <GlobalStyle />
