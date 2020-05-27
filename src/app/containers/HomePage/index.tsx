@@ -40,7 +40,7 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(4),
   },
   heroImage: {
-    backgroundImage: `url('https://m.media-amazon.com/images/M/MV5BYjc1N2M1YjMtYzBiNi00NGFiLThkN2QtY2EwZGU5MDRkODAzXkEyXkFqcGdeQXVyMTkzODUwNzk@._V1_UY1200_CR90,0,630,1200_AL_.jpg')`,
+    backgroundImage: `url('http://www.impawards.com/intl/brazil/2019/posters/bacurau_ver3.jpg')`,
     backgroundPosition: 'center',
     backgroundSize: 'contain',
     backgroundRepeat: 'no-repeat',
@@ -66,7 +66,53 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const cards = [1, 2, 3, 4, 5, 6];
+const cards = [
+  {
+    id: 1,
+    name: 'Parasite',
+    image: 'https://i.ytimg.com/vi/isOGD_7hNIY/maxresdefault.jpg',
+    plot:
+      'Greed and class discrimination threaten the newly formed symbiotic relationship between the wealthy Park family and the destitute Kim clan.',
+  },
+  {
+    id: 2,
+    name: 'Les Miserables',
+    image:
+      'https://upload.wikimedia.org/wikipedia/en/0/05/Les_Mis%C3%A9rables_2019_film_poster.jpg',
+    plot:
+      'Stéphane joined the Anti-Crime Brigade of Montfermeil. He meets his new teammates, Chris and Gwada, and discovers the tensions between the different groups of the district.',
+  },
+  {
+    id: 3,
+    name: 'Pain and Glory',
+    image:
+      'https://m.media-amazon.com/images/M/MV5BNWU4MTM2YTgtYTRlZC00ZmRhLTlkYTMtZDkyYzNjZDU1NmI0XkEyXkFqcGdeQXVyOTgxNDIzMTY@._V1_.jpg',
+    plot: `A film director reflects on the choices he's made in life as the past and present come crashing down around him.`,
+  },
+  {
+    id: 4,
+    name: 'Capernaum',
+    image:
+      'https://www.gstatic.com/tv/thumb/v22vodart/15563797/p15563797_v_v8_ab.jpg',
+    plot:
+      'After running away from his negligent parents, committing a violent crime and being sentenced to five years in jail, a hardened, streetwise 12-year-old Lebanese boy sues his parents in protest of the life they have given him.',
+  },
+  {
+    id: 5,
+    name: 'Never Look Away',
+    image:
+      'https://www.gstatic.com/tv/thumb/v22vodart/16245548/p16245548_v_v8_ac.jpg',
+    plot: `When two German art students fall in love, the girl's father, who has a devastating secret, vows to end their relationship.`,
+  },
+  {
+    id: 6,
+    name: 'Honeyland',
+    image:
+      'https://www.gstatic.com/tv/thumb/v22vodart/16711163/p16711163_v_v8_aa.jpg',
+    plot:
+      'A woman utilises ancient beekeeping traditions to cultivate honey in the mountains of North Macedonia. When a neighbouring family tries to do the same, it becomes a source of tension as they disregard her wisdom and advice.',
+  },
+];
 
 export function HomePage() {
   const classes = useStyles();
@@ -94,7 +140,7 @@ export function HomePage() {
         <div className={classes.heroContent}>
           <Grid container spacing={2}>
             <Grid item xs={2}></Grid>
-            <Grid item xs={4} className={classes.heroImage}></Grid>
+            <Grid item xs={3} className={classes.heroImage}></Grid>
             <Grid item xs={4}>
               <Typography
                 component="h1"
@@ -131,36 +177,32 @@ export function HomePage() {
                 </Grid>
               </div>
             </Grid>
-            <Grid item xs={2}></Grid>
+            <Grid item xs={3}></Grid>
           </Grid>
         </div>
         <Container className={classes.cardGrid} maxWidth="md">
           {/* End hero unit */}
           <Grid container spacing={4}>
             {cards.map(card => (
-              <Grid item key={card} xs={12} sm={6} md={4}>
+              <Grid item key={card.id} xs={12} sm={6} md={4}>
                 <Card className={classes.card}>
                   <CardMedia
                     className={classes.cardMedia}
-                    image="https://source.unsplash.com/random"
+                    image={card.image}
                     title="Image title"
                   />
                   <CardContent className={classes.cardContent}>
                     <Typography gutterBottom variant="h5" component="h2">
-                      Secondary Movie
+                      {card.name}
                     </Typography>
-                    <Typography>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing
-                      elit.Lorem ipsum dolor sit amet, consectetur adipiscing
-                      elit.
-                    </Typography>
+                    <Typography>{card.plot}</Typography>
                   </CardContent>
                   <CardActions>
                     <Button size="small" color="primary">
-                      View
+                      Rent
                     </Button>
                     <Button size="small" color="primary">
-                      Rent
+                      Buy
                     </Button>
                   </CardActions>
                 </Card>
@@ -180,7 +222,7 @@ export function HomePage() {
           color="textSecondary"
           component="p"
         >
-          proudly supporting independent filmmakers!
+          proudly supporting international filmmakers!
         </Typography>
         <Copyright />
       </footer>
