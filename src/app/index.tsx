@@ -23,7 +23,7 @@ export function App() {
       </Helmet>
 
       <Switch>
-        <Route exact path="/lumiere" component={HomePage} />
+        <Route exact path="/" component={HomePage} />
         <Route component={NotFoundPage} />
       </Switch>
       <GlobalStyle />
