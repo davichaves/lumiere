@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.js": "/lumi/static/js/main.f50c1496.chunk.js",
-    "runtime-main.js": "/lumi/static/js/runtime-main.f06ffdce.js",
+    "main.js": "/lumi/static/js/main.d8c2de61.chunk.js",
+    "runtime-main.js": "/lumi/static/js/runtime-main.33453f9b.js",
     "static/css/2.d54bb455.chunk.css": "/lumi/static/css/2.d54bb455.chunk.css",
     "static/js/2.a04d67e1.chunk.js": "/lumi/static/js/2.a04d67e1.chunk.js",
-    "static/js/3.770ac747.chunk.js": "/lumi/static/js/3.770ac747.chunk.js",
+    "static/js/3.8d3b56a9.chunk.js": "/lumi/static/js/3.8d3b56a9.chunk.js",
     "static/js/4.82194818.chunk.js": "/lumi/static/js/4.82194818.chunk.js",
-    "static/js/5.3521a136.chunk.js": "/lumi/static/js/5.3521a136.chunk.js",
+    "static/js/5.5dff1472.chunk.js": "/lumi/static/js/5.5dff1472.chunk.js",
     "index.html": "/lumi/index.html",
-    "precache-manifest.843d12cd2e42f35649f73c6fd9e79b54.js": "/lumi/precache-manifest.843d12cd2e42f35649f73c6fd9e79b54.js",
+    "precache-manifest.15cb40530ac790e8df3703c83513dac8.js": "/lumi/precache-manifest.15cb40530ac790e8df3703c83513dac8.js",
     "service-worker.js": "/lumi/service-worker.js",
     "static/js/2.a04d67e1.chunk.js.LICENSE.txt": "/lumi/static/js/2.a04d67e1.chunk.js.LICENSE.txt",
-    "static/js/3.770ac747.chunk.js.LICENSE.txt": "/lumi/static/js/3.770ac747.chunk.js.LICENSE.txt"
+    "static/js/3.8d3b56a9.chunk.js.LICENSE.txt": "/lumi/static/js/3.8d3b56a9.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.f06ffdce.js",
+    "static/js/runtime-main.33453f9b.js",
     "static/css/2.d54bb455.chunk.css",
     "static/js/2.a04d67e1.chunk.js",
-    "static/js/main.f50c1496.chunk.js"
+    "static/js/main.d8c2de61.chunk.js"
   ]
 }
