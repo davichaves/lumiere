@@ -1,19 +1,18 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
-import VideocamIcon from '@material-ui/icons/Videocam';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
-import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
+
+import { Navigation } from '../../components/Navigation';
 
 function Copyright() {
   return (
@@ -127,14 +126,7 @@ export function HomePage() {
         />
       </Helmet>
       <CssBaseline />
-      <AppBar position="relative">
-        <Toolbar>
-          <VideocamIcon className={classes.icon} />
-          <Typography variant="h6" color="inherit" noWrap>
-            Lumiere
-          </Typography>
-        </Toolbar>
-      </AppBar>
+      <Navigation />
       <main>
         {/* Hero unit */}
         <div className={classes.heroContent}>
