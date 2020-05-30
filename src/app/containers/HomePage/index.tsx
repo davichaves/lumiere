@@ -158,12 +158,7 @@ export function HomePage() {
                 <Grid container spacing={2} justify="center">
                   <Grid item>
                     <Button variant="contained" color="primary">
-                      Rent ($5.99)
-                    </Button>
-                  </Grid>
-                  <Grid item>
-                    <Button variant="outlined" color="primary">
-                      Buy ($9.99)
+                      Watch Now
                     </Button>
                   </Grid>
                 </Grid>
@@ -191,10 +186,7 @@ export function HomePage() {
                   </CardContent>
                   <CardActions>
                     <Button size="small" color="primary">
-                      Rent
-                    </Button>
-                    <Button size="small" color="primary">
-                      Buy
+                      Watch Now
                     </Button>
                   </CardActions>
                 </Card>
