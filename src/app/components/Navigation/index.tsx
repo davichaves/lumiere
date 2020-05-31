@@ -5,6 +5,7 @@
  */
 import React, { memo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router-dom';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -75,12 +76,23 @@ export const Navigation = memo((props: Props) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { t, i18n } = useTranslation();
   const classes = useStyles();
+  const history = useHistory();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const isMenuOpen = Boolean(anchorEl);
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
+  };
+
+  const handleSignInClick = () => {
+    history.push('/signin');
+    handleMenuClose();
+  };
+
+  const handleSignUpClick = () => {
+    history.push('/signup');
+    handleMenuClose();
   };
 
   const handleMenuClose = () => {
@@ -98,8 +110,8 @@ export const Navigation = memo((props: Props) => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>{t('Navigation.login')}</MenuItem>
-      <MenuItem onClick={handleMenuClose}>{t('Navigation.signup')}</MenuItem>
+      <MenuItem onClick={handleSignInClick}>{t('Navigation.login')}</MenuItem>
+      <MenuItem onClick={handleSignUpClick}>{t('Navigation.signup')}</MenuItem>
     </Menu>
   );
 

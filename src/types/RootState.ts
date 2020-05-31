@@ -1,4 +1,5 @@
 import { RouterState } from 'connected-react-router';
+import { SignInPageState } from 'app/containers/SignInPage/types';
 // [IMPORT NEW CONTAINERSTATE ABOVE] < Needed for generating containers seamlessly
 
 /* 
@@ -7,5 +8,6 @@ import { RouterState } from 'connected-react-router';
 */
 export interface RootState {
   router?: RouterState;
+  signInPage?: SignInPageState;
   // [INSERT NEW REDUCER KEY ABOVE] < Needed for generating containers seamlessly
 }

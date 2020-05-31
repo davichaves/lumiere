@@ -13,19 +13,7 @@ import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 
 import { Navigation } from '../../components/Navigation';
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Lumiere
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import { Copyright } from '../../components/Copyright/index';
 
 const useStyles = makeStyles(theme => ({
   icon: {
