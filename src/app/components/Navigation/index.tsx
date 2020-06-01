@@ -85,6 +85,10 @@ export const Navigation = memo((props: Props) => {
     setAnchorEl(event.currentTarget);
   };
 
+  const handleHomeClick = () => {
+    history.push('/');
+  };
+
   const handleSignInClick = () => {
     history.push('/signin');
     handleMenuClose();
@@ -115,8 +119,6 @@ export const Navigation = memo((props: Props) => {
     </Menu>
   );
 
-  const mobileMenuId = 'primary-search-account-menu-mobile';
-
   return (
     <div className={classes.grow}>
       <AppBar position="static">
@@ -126,10 +128,16 @@ export const Navigation = memo((props: Props) => {
             className={classes.menuButton}
             color="inherit"
             aria-label="open drawer"
+            onClick={handleHomeClick}
           >
             <CameraIcon />
           </IconButton>
-          <Typography className={classes.title} variant="h6" noWrap>
+          <Typography
+            className={classes.title}
+            variant="h6"
+            noWrap
+            onClick={handleHomeClick}
+          >
             {t('title')}
           </Typography>
           <div className={classes.search}>

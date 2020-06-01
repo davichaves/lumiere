@@ -8,8 +8,6 @@ import React, { memo } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
-import styled from 'styled-components/macro';
-import { useHistory } from 'react-router-dom';
 
 import { useInjectReducer } from 'utils/redux-injectors';
 import { reducer, sliceKey } from './slice';
@@ -151,7 +149,7 @@ export const SignUpPage = memo((props: Props) => {
               <Grid container>
                 <Grid item xs></Grid>
                 <Grid item>
-                  <Link href="#" variant="body2">
+                  <Link href="/signin" variant="body2">
                     {'Already Have an account? Sign In'}
                   </Link>
                 </Grid>
