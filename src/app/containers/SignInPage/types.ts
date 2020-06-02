@@ -1,4 +1,6 @@
 /* --- STATE --- */
-export interface SignInPageState {}
+export interface SignInPageState {
+  current_user: object;
+}
 
 export type ContainerState = SignInPageState;

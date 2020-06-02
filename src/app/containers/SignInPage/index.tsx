@@ -4,17 +4,19 @@
  *
  */
 
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
+import Cookies from 'js-cookie';
 
 import { useInjectReducer } from 'utils/redux-injectors';
-import { reducer, sliceKey } from './slice';
+import { reducer, sliceKey, actions } from './slice';
 import { selectSignInPage } from './selectors';
 
 import { Navigation } from '../../components/Navigation';
 import { Copyright } from '../../components/Copyright/index';
+import { BASE_URL, API_KEY } from '../../constants';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -67,6 +69,8 @@ interface Props {}
 
 export const SignInPage = memo((props: Props) => {
   useInjectReducer({ key: sliceKey, reducer: reducer });
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const signInPage = useSelector(selectSignInPage);
@@ -77,6 +81,42 @@ export const SignInPage = memo((props: Props) => {
   const { t, i18n } = useTranslation();
 
   const classes = useStyles();
+
+  const handleEmailChange = e => {
+    setEmail(e.target.value);
+  };
+
+  const handlePasswordChange = e => {
+    setPassword(e.target.value);
+  };
+
+  const handleSubmitClick = () => {
+    const body = JSON.stringify({
+      email: email,
+      password: password,
+    });
+    fetch(`${BASE_URL}/users/auth/signin`, {
+      method: 'POST',
+      body: body,
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': API_KEY,
+      },
+    })
+      .then(resp => resp.json())
+      .then(data => {
+        console.log(data);
+        if (data.error) {
+          console.log(data.error);
+          // Here you should have logic to handle invalid login credentials.
+          // This assumes your Rails API will return a JSON object with a key of
+          // 'message' if there is an error
+        } else {
+          dispatch(actions.setCurrentUser(data.user));
+          Cookies.set('token', data.token);
+        }
+      });
+  };
 
   return (
     <React.Fragment>
@@ -111,6 +151,8 @@ export const SignInPage = memo((props: Props) => {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                value={email}
+                onChange={handleEmailChange}
               />
               <TextField
                 variant="outlined"
@@ -122,17 +164,19 @@ export const SignInPage = memo((props: Props) => {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                value={password}
+                onChange={handlePasswordChange}
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               />
               <Button
-                type="submit"
                 fullWidth
                 variant="contained"
                 color="primary"
                 className={classes.submit}
+                onClick={handleSubmitClick}
               >
                 Sign In
               </Button>

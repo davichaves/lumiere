@@ -8,7 +8,8 @@
 
 import * as React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 import { GlobalStyle } from 'styles/global-styles';
 
@@ -16,6 +17,34 @@ import { HomePage } from './containers/HomePage/Loadable';
 import { SignInPage } from './containers/SignInPage/Loadable';
 import { SignUpPage } from './containers/SignUpPage/Loadable';
 import { NotFoundPage } from './components/NotFoundPage/Loadable';
+
+const PrivateRoute = ({ component: Component, ...rest }) => (
+  <Route
+    {...rest}
+    render={props =>
+      Cookies.get('token') ? (
+        <Component {...props} />
+      ) : (
+        <Redirect
+          to={{ pathname: '/signin', state: { from: props.location } }}
+        />
+      )
+    }
+  />
+);
+
+const AuthRoute = ({ component: Component, ...rest }) => (
+  <Route
+    {...rest}
+    render={props =>
+      !Cookies.get('token') ? (
+        <Component {...props} />
+      ) : (
+        <Redirect to={{ pathname: '/', state: { from: props.location } }} />
+      )
+    }
+  />
+);
 
 export function App() {
   return (
@@ -26,8 +55,8 @@ export function App() {
 
       <Switch>
         <Route exact path="/" component={HomePage} />
-        <Route exact path="/signin" component={SignInPage} />
-        <Route exact path="/signup" component={SignUpPage} />
+        <AuthRoute exact path="/signin" component={SignInPage} />
+        <AuthRoute exact path="/signup" component={SignUpPage} />
         <Route component={NotFoundPage} />
       </Switch>
       <GlobalStyle />

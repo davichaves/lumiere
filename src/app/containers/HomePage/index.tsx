@@ -1,5 +1,20 @@
-import React from 'react';
+/**
+ *
+ * HomePage
+ *
+ */
+
+import React, { memo, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useTranslation } from 'react-i18next';
+import { useSelector, useDispatch } from 'react-redux';
+import Cookies from 'js-cookie';
+
+import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
+import { reducer, sliceKey, actions } from './slice';
+import { selectHomePage } from './selectors';
+import { homePageSaga } from './saga';
+
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -13,6 +28,9 @@ import Container from '@material-ui/core/Container';
 
 import { Navigation } from '../../components/Navigation';
 import { Copyright } from '../../components/Copyright/index';
+import { BASE_URL, API_KEY } from '../../constants';
+
+interface Props {}
 
 const useStyles = makeStyles(theme => ({
   icon: {
@@ -100,7 +118,43 @@ const cards = [
   },
 ];
 
-export function HomePage() {
+export const HomePage = memo((props: Props) => {
+  useInjectReducer({ key: sliceKey, reducer: reducer });
+  useInjectSaga({ key: sliceKey, saga: homePageSaga });
+
+  useEffect(() => {
+    if (Object.keys(homePage.current_user).length === 0) {
+      fetch(`${BASE_URL}/users/profile`, {
+        method: 'GET',
+        headers: {
+          'api-key': API_KEY,
+          Authorization: String(Cookies.get('token')),
+        },
+      })
+        .then(resp => resp.json())
+        .then(data => {
+          console.log('data', data);
+          if (data.error) {
+            console.log(data.error);
+            // Here you should have logic to handle invalid login credentials.
+            // This assumes your Rails API will return a JSON object with a key of
+            // 'message' if there is an error
+          } else {
+            // setUser(data);
+            dispatch(actions.setCurrentUser(data));
+          }
+        });
+    }
+  });
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const homePage = useSelector(selectHomePage);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const dispatch = useDispatch();
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { t, i18n } = useTranslation();
+
   const classes = useStyles();
 
   return (
@@ -200,4 +254,4 @@ export function HomePage() {
       {/* End footer */}
     </React.Fragment>
   );
-}
+});

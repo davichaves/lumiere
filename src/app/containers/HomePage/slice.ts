@@ -2,13 +2,13 @@ import { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from 'utils/@reduxjs/toolkit';
 import { ContainerState } from './types';
 
-// The initial state of the SignInPage container
+// The initial state of the HomePage container
 export const initialState: ContainerState = {
   current_user: {},
 };
 
-const signInPageSlice = createSlice({
-  name: 'signInPage',
+const homePageSlice = createSlice({
+  name: 'homePage',
   initialState,
   reducers: {
     setCurrentUser(state, action: PayloadAction<object>) {
@@ -19,4 +19,4 @@ const signInPageSlice = createSlice({
   },
 });
 
-export const { actions, reducer, name: sliceKey } = signInPageSlice;
+export const { actions, reducer, name: sliceKey } = homePageSlice;
