@@ -8,10 +8,11 @@ import React, { memo, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
 import { useInjectReducer } from 'utils/redux-injectors';
-import { reducer, sliceKey, actions } from './slice';
+import { reducer, sliceKey } from './slice';
 import { selectSignInPage } from './selectors';
 
 import { Navigation } from '../../components/Navigation';
@@ -81,6 +82,7 @@ export const SignInPage = memo((props: Props) => {
   const { t, i18n } = useTranslation();
 
   const classes = useStyles();
+  const history = useHistory();
 
   const handleEmailChange = e => {
     setEmail(e.target.value);
@@ -112,7 +114,7 @@ export const SignInPage = memo((props: Props) => {
           // This assumes your Rails API will return a JSON object with a key of
           // 'message' if there is an error
         } else {
-          dispatch(actions.setCurrentUser(data.user));
+          history.push('/');
           Cookies.set('token', data.token);
         }
       });
