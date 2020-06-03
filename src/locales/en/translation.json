@@ -3,7 +3,10 @@
   "Navigation": {
     "search": "Search...",
     "login": "Sign in",
-    "signup": "Sign up"
+    "signup": "Sign up",
+    "profile": "Profile",
+    "signout": "Sign out",
+    "welcome": "Welcome, "
   },
   "Copyright": {
     "copyright": "Copyright © "

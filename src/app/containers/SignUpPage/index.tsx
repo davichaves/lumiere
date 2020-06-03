@@ -4,10 +4,12 @@
  *
  */
 
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 import { useInjectReducer } from 'utils/redux-injectors';
 import { reducer, sliceKey } from './slice';
@@ -15,6 +17,7 @@ import { selectSignUpPage } from './selectors';
 
 import { Navigation } from '../../components/Navigation';
 import { Copyright } from '../../components/Copyright/index';
+import { BASE_URL, API_KEY } from '../../constants';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -67,6 +70,9 @@ interface Props {}
 
 export const SignUpPage = memo((props: Props) => {
   useInjectReducer({ key: sliceKey, reducer: reducer });
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const signUpPage = useSelector(selectSignUpPage);
@@ -77,6 +83,48 @@ export const SignUpPage = memo((props: Props) => {
   const { t, i18n } = useTranslation();
 
   const classes = useStyles();
+  const history = useHistory();
+
+  const handleNameChange = e => {
+    setName(e.target.value);
+  };
+
+  const handleEmailChange = e => {
+    setEmail(e.target.value);
+  };
+
+  const handlePasswordChange = e => {
+    setPassword(e.target.value);
+  };
+
+  const handleSubmitClick = () => {
+    const body = JSON.stringify({
+      name: name,
+      email: email,
+      password: password,
+    });
+    fetch(`${BASE_URL}/users/auth/signup`, {
+      method: 'POST',
+      body: body,
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': API_KEY,
+      },
+    })
+      .then(resp => resp.json())
+      .then(data => {
+        console.log('signup data ', data);
+        if (data.error) {
+          console.log(data.error);
+          // Here you should have logic to handle invalid login credentials.
+          // This assumes your Rails API will return a JSON object with a key of
+          // 'message' if there is an error
+        } else {
+          history.push('/');
+          Cookies.set('token', data.token);
+        }
+      });
+  };
 
   return (
     <React.Fragment>
@@ -88,7 +136,7 @@ export const SignUpPage = memo((props: Props) => {
         />
       </Helmet>
       <CssBaseline />
-      <Navigation />
+      <Navigation user={{}} />
       <Grid container component="main" className={classes.root}>
         <CssBaseline />
         <Grid item xs={false} sm={4} md={7} className={classes.image} />
@@ -111,6 +159,8 @@ export const SignUpPage = memo((props: Props) => {
                 name="name"
                 autoComplete="name"
                 autoFocus
+                value={name}
+                onChange={handleNameChange}
               />
               <TextField
                 variant="outlined"
@@ -121,6 +171,8 @@ export const SignUpPage = memo((props: Props) => {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                value={email}
+                onChange={handleEmailChange}
               />
               <TextField
                 variant="outlined"
@@ -132,17 +184,19 @@ export const SignUpPage = memo((props: Props) => {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                value={password}
+                onChange={handlePasswordChange}
               />
               <FormControlLabel
                 control={<Checkbox value="tos" color="primary" />}
                 label="I agree with the Terms of Service and Privacy Policy"
               />
               <Button
-                type="submit"
                 fullWidth
                 variant="contained"
                 color="primary"
                 className={classes.submit}
+                onClick={handleSubmitClick}
               >
                 Sign Up
               </Button>

@@ -5,7 +5,7 @@ import { Navigation } from '..';
 
 describe('<Navigation  />', () => {
   it('should match snapshot', () => {
-    const loadingIndicator = render(<Navigation />);
+    const loadingIndicator = render(<Navigation user={{}} />);
     expect(loadingIndicator.container.firstChild).toMatchSnapshot();
   });
 });

@@ -6,6 +6,7 @@
 import React, { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
+import Cookies from 'js-cookie';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -18,7 +19,9 @@ import CameraIcon from '@material-ui/icons/Videocam';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 
-interface Props {}
+interface Props {
+  user: any;
+}
 
 const useStyles = makeStyles(theme => ({
   grow: {
@@ -85,6 +88,10 @@ export const Navigation = memo((props: Props) => {
     setAnchorEl(event.currentTarget);
   };
 
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
   const handleHomeClick = () => {
     history.push('/');
   };
@@ -99,9 +106,20 @@ export const Navigation = memo((props: Props) => {
     handleMenuClose();
   };
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
+  const handleProfileClick = () => {
+    history.push('/profile');
+    handleMenuClose();
   };
+
+  const handleSignOutClick = () => {
+    history.push('/signin');
+    Cookies.remove('token');
+    handleMenuClose();
+  };
+
+  const { name } = props.user;
+
+  console.log('navigation user: ', props.user, name);
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -116,6 +134,26 @@ export const Navigation = memo((props: Props) => {
     >
       <MenuItem onClick={handleSignInClick}>{t('Navigation.login')}</MenuItem>
       <MenuItem onClick={handleSignUpClick}>{t('Navigation.signup')}</MenuItem>
+    </Menu>
+  );
+
+  const menusignedInId = 'primary-search-account-menu';
+  const renderMenusignedInId = (
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      id={menusignedInId}
+      keepMounted
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
+      <MenuItem onClick={handleProfileClick}>
+        {t('Navigation.profile')}
+      </MenuItem>
+      <MenuItem onClick={handleSignOutClick}>
+        {t('Navigation.signout')}
+      </MenuItem>
     </Menu>
   );
 
@@ -155,6 +193,7 @@ export const Navigation = memo((props: Props) => {
           </div>
           <div className={classes.grow} />
           <div>
+            {name !== undefined ? t('Navigation.welcome') + name : ''}
             <IconButton
               edge="end"
               aria-label="account of current user"
@@ -168,7 +207,7 @@ export const Navigation = memo((props: Props) => {
           </div>
         </Toolbar>
       </AppBar>
-      {renderMenu}
+      {name !== undefined ? renderMenusignedInId : renderMenu}
     </div>
   );
 });

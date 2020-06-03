@@ -133,7 +133,6 @@ export const HomePage = memo((props: Props) => {
       })
         .then(resp => resp.json())
         .then(data => {
-          console.log('data', data);
           if (data.error) {
             console.log(data.error);
             // Here you should have logic to handle invalid login credentials.
@@ -167,7 +166,7 @@ export const HomePage = memo((props: Props) => {
         />
       </Helmet>
       <CssBaseline />
-      <Navigation />
+      <Navigation user={homePage.current_user} />
       <main>
         {/* Hero unit */}
         <div className={classes.heroContent}>

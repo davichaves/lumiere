@@ -128,7 +128,7 @@ export const SignInPage = memo((props: Props) => {
         />
       </Helmet>
       <CssBaseline />
-      <Navigation />
+      <Navigation user={{}} />
       <Grid container component="main" className={classes.root}>
         <CssBaseline />
         <Grid item xs={false} sm={4} md={7} className={classes.image} />
