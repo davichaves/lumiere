@@ -16,8 +16,14 @@ export interface Movie {
   updated_at: string;
 }
 
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
 export interface HomePageState {
-  current_user: object;
+  current_user: User;
   featured_movie: Movie;
   movies: Movie[];
 }

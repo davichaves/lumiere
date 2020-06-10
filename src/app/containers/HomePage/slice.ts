@@ -1,6 +1,6 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from 'utils/@reduxjs/toolkit';
-import { ContainerState, Movie } from './types';
+import { ContainerState, Movie, User } from './types';
 
 export const emptyMovie = {
   id: 0,
@@ -19,9 +19,15 @@ export const emptyMovie = {
   updated_at: '',
 };
 
+export const emptyUser = {
+  id: 0,
+  name: '',
+  email: '',
+};
+
 // The initial state of the HomePage container
 export const initialState: ContainerState = {
-  current_user: {},
+  current_user: emptyUser,
   featured_movie: emptyMovie,
   movies: [],
 };
@@ -30,7 +36,7 @@ const homePageSlice = createSlice({
   name: 'homePage',
   initialState,
   reducers: {
-    setCurrentUser(state, action: PayloadAction<object>) {
+    setCurrentUser(state, action: PayloadAction<User>) {
       // Here we update the current user
       // Type-safe: It will expect `object` when firing the action. ✅
       state.current_user = action.payload;
