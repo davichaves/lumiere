@@ -16,6 +16,7 @@ import { GlobalStyle } from 'styles/global-styles';
 import { HomePage } from './containers/HomePage/Loadable';
 import { SignInPage } from './containers/SignInPage/Loadable';
 import { SignUpPage } from './containers/SignUpPage/Loadable';
+import { CheckoutPage } from './containers/CheckoutPage/Loadable';
 import { NotFoundPage } from './components/NotFoundPage/Loadable';
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
@@ -57,6 +58,7 @@ export function App() {
         <Route exact path="/" component={HomePage} />
         <AuthRoute exact path="/signin" component={SignInPage} />
         <AuthRoute exact path="/signup" component={SignUpPage} />
+        <PrivateRoute exact path="/:blob/checkout" component={CheckoutPage} />
         <Route component={NotFoundPage} />
       </Switch>
       <GlobalStyle />

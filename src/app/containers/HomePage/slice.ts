@@ -2,9 +2,10 @@ import { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from 'utils/@reduxjs/toolkit';
 import { ContainerState, Movie } from './types';
 
-const emptyMovie = {
+export const emptyMovie = {
   id: 0,
   title: '',
+  blob: '',
   director: '',
   cast: '',
   description: '',

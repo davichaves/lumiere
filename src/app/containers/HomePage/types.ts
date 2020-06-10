@@ -2,6 +2,7 @@
 export interface Movie {
   id: number;
   title: string;
+  blob: string;
   director: string;
   cast: string;
   description: string;
