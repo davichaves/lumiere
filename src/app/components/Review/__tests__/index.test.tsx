@@ -5,7 +5,7 @@ import { Review } from '..';
 
 describe('<Review  />', () => {
   it('should match snapshot', () => {
-    const loadingIndicator = render(<Review />);
+    const loadingIndicator = render(<Review movie={{}} />);
     expect(loadingIndicator.container.firstChild).toMatchSnapshot();
   });
 });
