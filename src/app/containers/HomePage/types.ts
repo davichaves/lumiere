@@ -22,6 +22,16 @@ export interface User {
   email: string;
 }
 
+export interface Ticket {
+  id: number;
+  movie_id: number;
+  user_id: number;
+  expiration: string;
+  price: string;
+  status: string;
+  stripe_payment_intent_id: string;
+}
+
 export interface HomePageState {
   current_user: User;
   featured_movie: Movie;

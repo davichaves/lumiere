@@ -117,10 +117,6 @@ export const Navigation = memo((props: Props) => {
     handleMenuClose();
   };
 
-  const { name } = props.user;
-
-  console.log('navigation user: ', props.user, name);
-
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
@@ -193,7 +189,9 @@ export const Navigation = memo((props: Props) => {
           </div>
           <div className={classes.grow} />
           <div>
-            {name !== undefined ? t('Navigation.welcome') + name : ''}
+            {props.user.id !== 0
+              ? t('Navigation.welcome') + props.user.name
+              : ''}
             <IconButton
               edge="end"
               aria-label="account of current user"
@@ -207,7 +205,7 @@ export const Navigation = memo((props: Props) => {
           </div>
         </Toolbar>
       </AppBar>
-      {name !== undefined ? renderMenusignedInId : renderMenu}
+      {props.user.id !== 0 ? renderMenusignedInId : renderMenu}
     </div>
   );
 });

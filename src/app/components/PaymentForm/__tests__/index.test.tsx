@@ -6,7 +6,7 @@ import { PaymentForm } from '..';
 describe('<PaymentForm  />', () => {
   it('should match snapshot', () => {
     const loadingIndicator = render(
-      <PaymentForm ticket={{}} clientSecret={''} />,
+      <PaymentForm ticket={{}} clientSecret={''} handleNext={() => {}} />,
     );
     expect(loadingIndicator.container.firstChild).toMatchSnapshot();
   });

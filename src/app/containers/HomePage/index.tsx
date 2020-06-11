@@ -7,6 +7,7 @@
 import React, { memo, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Cookies from 'js-cookie';
 
@@ -78,7 +79,7 @@ export const HomePage = memo((props: Props) => {
   useInjectSaga({ key: sliceKey, saga: homePageSaga });
 
   useEffect(() => {
-    if (Object.keys(homePage.current_user).length === 0) {
+    if (homePage.current_user.id === 0) {
       fetch(`${BASE_URL}/users/profile`, {
         method: 'GET',
         headers: {
@@ -132,6 +133,7 @@ export const HomePage = memo((props: Props) => {
   const { t, i18n } = useTranslation();
 
   const classes = useStyles();
+  const history = useHistory();
 
   return (
     <React.Fragment>
@@ -167,6 +169,7 @@ export const HomePage = memo((props: Props) => {
                   <img
                     src={homePage.featured_movie.poster_url}
                     className={classes.featuredImage}
+                    alt="featured film poster"
                   />
                 </Grid>
               </Grid>
@@ -192,7 +195,15 @@ export const HomePage = memo((props: Props) => {
               <div className={classes.heroButtons}>
                 <Grid container spacing={2} justify="center">
                   <Grid item>
-                    <Button variant="contained" color="primary">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => {
+                        history.push(
+                          `${homePage.featured_movie.blob}/checkout`,
+                        );
+                      }}
+                    >
                       Watch Now
                     </Button>
                   </Grid>
@@ -220,7 +231,13 @@ export const HomePage = memo((props: Props) => {
                     <Typography>{movie.description}</Typography>
                   </CardContent>
                   <CardActions>
-                    <Button size="small" color="primary">
+                    <Button
+                      size="small"
+                      color="primary"
+                      onClick={() => {
+                        history.push(`${movie.blob}/checkout`);
+                      }}
+                    >
                       Watch Now
                     </Button>
                   </CardActions>

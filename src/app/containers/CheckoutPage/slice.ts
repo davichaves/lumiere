@@ -1,14 +1,14 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from 'utils/@reduxjs/toolkit';
 import { ContainerState } from './types';
-import { Movie, User } from '../HomePage/types';
-import { emptyMovie, emptyUser } from '../HomePage/slice';
+import { Movie, User, Ticket } from '../HomePage/types';
+import { emptyMovie, emptyUser, emptyTicket } from '../HomePage/slice';
 
 // The initial state of the CheckoutPage container
 export const initialState: ContainerState = {
   movie: emptyMovie,
   current_user: emptyUser,
-  ticket: {},
+  ticket: emptyTicket,
   client_secret: '',
 };
 
@@ -22,7 +22,7 @@ const checkoutPageSlice = createSlice({
     setCurrentUser(state, action: PayloadAction<User>) {
       state.current_user = action.payload;
     },
-    setTicket(state, action: PayloadAction<object>) {
+    setTicket(state, action: PayloadAction<Ticket>) {
       state.ticket = action.payload;
     },
     setClientSecret(state, action: PayloadAction<string>) {

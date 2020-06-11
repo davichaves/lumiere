@@ -4,9 +4,10 @@
  *
  */
 
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
@@ -28,6 +29,7 @@ import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
+import Grid from '@material-ui/core/Grid';
 
 import { PaymentForm } from '../../components/PaymentForm/index';
 import { Review } from '../../components/Review/index';
@@ -61,10 +63,6 @@ const useStyles = makeStyles(theme => ({
   stepper: {
     padding: theme.spacing(5, 5, 5),
   },
-  buttons: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-  },
   separator: {
     marginTop: theme.spacing(3),
     marginBottom: theme.spacing(3),
@@ -72,6 +70,16 @@ const useStyles = makeStyles(theme => ({
   button: {
     marginTop: theme.spacing(3),
     marginLeft: theme.spacing(1),
+  },
+  buttonGrid: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  buttonWatch: {
+    marginTop: theme.spacing(3),
+    marginLeft: theme.spacing(1),
+    width: '50%',
+    height: '40px',
   },
 }));
 
@@ -96,19 +104,36 @@ export const CheckoutPage = memo((props: Props) => {
   let { blob } = useParams();
 
   const classes = useStyles();
+  const history = useHistory();
   const [activeStep, setActiveStep] = React.useState(0);
 
   const handleNext = () => {
-    setActiveStep(activeStep + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep(activeStep - 1);
+    fetch(`${BASE_URL}/tickets/paid`, {
+      method: 'POST',
+      body: JSON.stringify({
+        movie_id: checkoutPage.movie.id,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': API_KEY,
+        Authorization: String(Cookies.get('token')),
+      },
+    })
+      .then(resp => resp.json())
+      .then(data => {
+        if (data.error) {
+          console.log('checkout paid error: ', data.error);
+        } else {
+          setActiveStep(activeStep + 1);
+          dispatch(actions.setTicket(data.ticket));
+          dispatch(actions.setMovie(data.movie));
+        }
+      });
   };
 
   useEffect(() => {
-    if (checkoutPage.current_user.id === 0) {
-      fetch(`${BASE_URL}/users/profile`, {
+    if (checkoutPage.movie.id === 0) {
+      fetch(`${BASE_URL}/movies/${blob}`, {
         method: 'GET',
         headers: {
           'api-key': API_KEY,
@@ -119,62 +144,43 @@ export const CheckoutPage = memo((props: Props) => {
         .then(data => {
           if (data.error) {
             console.log(data.error);
-            // Here you should have logic to handle invalid login credentials.
-            // This assumes your Rails API will return a JSON object with a key of
-            // 'message' if there is an error
           } else {
-            // setUser(data);
-            dispatch(actions.setCurrentUser(data));
-          }
-        });
-    }
-    if (checkoutPage.movie.id === 0) {
-      fetch(`${BASE_URL}/movies/${blob}`, {
-        method: 'GET',
-        headers: {
-          'api-key': API_KEY,
-        },
-      })
-        .then(resp => resp.json())
-        .then(data => {
-          if (data.error) {
-            console.log(data.error);
-            // Here you should have logic to handle invalid login credentials.
-            // This assumes your Rails API will return a JSON object with a key of
-            // 'message' if there is an error
-          } else {
-            dispatch(actions.setMovie(data));
-          }
-        });
-    }
-    if (
-      checkoutPage.client_secret === '' &&
-      checkoutPage.movie.id !== 0 &&
-      checkoutPage.current_user.id !== 0
-    ) {
-      const body = JSON.stringify({
-        movie_id: checkoutPage.movie.id,
-        user_id: checkoutPage.current_user.id,
-      });
-      fetch(`${BASE_URL}/tickets`, {
-        method: 'POST',
-        body: body,
-        headers: {
-          'Content-Type': 'application/json',
-          'api-key': API_KEY,
-        },
-      })
-        .then(resp => resp.json())
-        .then(data => {
-          if (data.error) {
-            console.log(data.error);
-          } else {
-            dispatch(actions.setTicket(data.ticket));
-            dispatch(actions.setClientSecret(data.client_secret));
+            dispatch(actions.setMovie(data.movie));
+            dispatch(actions.setCurrentUser(data.user));
+            const body = JSON.stringify({
+              movie_id: data.movie.id,
+              user_id: data.user.id,
+            });
+            fetch(`${BASE_URL}/tickets`, {
+              method: 'POST',
+              body: body,
+              headers: {
+                'Content-Type': 'application/json',
+                'api-key': API_KEY,
+                Authorization: String(Cookies.get('token')),
+              },
+            })
+              .then(resp => resp.json())
+              .then(data => {
+                if (data.error) {
+                  console.log('data movies error: ', data.error);
+                  if (data.error === 'valid ticket found') {
+                    dispatch(actions.setTicket(data.ticket));
+                    setActiveStep(activeStep + 1);
+                  }
+                } else {
+                  dispatch(actions.setTicket(data.ticket));
+                  dispatch(actions.setClientSecret(data.client_secret));
+                }
+              });
           }
         });
     }
   });
+
+  if (checkoutPage.ticket.status === 'paid' && activeStep === 0) {
+    setActiveStep(activeStep + 1);
+  }
 
   return (
     <React.Fragment>
@@ -186,51 +192,56 @@ export const CheckoutPage = memo((props: Props) => {
       <Navigation user={checkoutPage.current_user} />
       <Elements stripe={promise}>
         <main className={classes.layout}>
-          <Paper className={classes.paper}>
-            <Typography component="h1" variant="h4" align="center">
-              Rent - {checkoutPage.movie.title}
-            </Typography>
-            <Stepper activeStep={activeStep} className={classes.stepper}>
-              {steps.map(label => (
-                <Step key={label}>
-                  <StepLabel>{label}</StepLabel>
-                </Step>
-              ))}
-            </Stepper>
-            <Review movie={checkoutPage.movie} />
-            <Divider variant="middle" className={classes.separator} />
-            <React.Fragment>
-              {activeStep === 1 ? (
-                <React.Fragment>
-                  <Typography variant="h5" gutterBottom>
-                    Thank you for your order.
-                  </Typography>
-                  <Typography variant="subtitle1">
-                    Your order number is #2001539. We have emailed your order
-                    confirmation, and will send you an update when your order
-                    has shipped.
-                  </Typography>
-                </React.Fragment>
-              ) : (
-                <React.Fragment>
-                  <PaymentForm
-                    ticket={checkoutPage.client_secret}
-                    clientSecret={''}
-                  />
-                  <div className={classes.buttons}>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={handleNext}
-                      className={classes.button}
-                    >
-                      {'Place order'}
-                    </Button>
-                  </div>
-                </React.Fragment>
-              )}
-            </React.Fragment>
-          </Paper>
+          {checkoutPage.movie.id !== 0 && (
+            <Paper className={classes.paper}>
+              <Typography component="h1" variant="h4" align="center">
+                Rent - {checkoutPage.movie.title}
+              </Typography>
+              <Stepper activeStep={activeStep} className={classes.stepper}>
+                {steps.map(label => (
+                  <Step key={label}>
+                    <StepLabel>{label}</StepLabel>
+                  </Step>
+                ))}
+              </Stepper>
+              <Review movie={checkoutPage.movie} />
+              <Divider variant="middle" className={classes.separator} />
+              <React.Fragment>
+                {activeStep === 1 ? (
+                  <React.Fragment>
+                    <Typography variant="h5" gutterBottom>
+                      Thank you for your order.
+                    </Typography>
+                    <Typography variant="subtitle1">
+                      Your order number is {checkoutPage.ticket.id}. We have
+                      emailed your order confirmation.
+                    </Typography>
+                    <Grid item xs={12} md={12} className={classes.buttonGrid}>
+                      <Button
+                        size="small"
+                        variant="contained"
+                        color="primary"
+                        onClick={() => {
+                          history.push(`/watch`);
+                        }}
+                        className={classes.buttonWatch}
+                      >
+                        Watch Now
+                      </Button>
+                    </Grid>
+                  </React.Fragment>
+                ) : (
+                  <React.Fragment>
+                    <PaymentForm
+                      ticket={checkoutPage.ticket}
+                      clientSecret={checkoutPage.client_secret}
+                      handleNext={handleNext}
+                    />
+                  </React.Fragment>
+                )}
+              </React.Fragment>
+            </Paper>
+          )}
           <Copyright />
         </main>
       </Elements>

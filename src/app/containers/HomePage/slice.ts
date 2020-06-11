@@ -25,6 +25,16 @@ export const emptyUser = {
   email: '',
 };
 
+export const emptyTicket = {
+  id: 0,
+  movie_id: 0,
+  user_id: 0,
+  expiration: '',
+  price: '',
+  status: '',
+  stripe_payment_intent_id: '',
+};
+
 // The initial state of the HomePage container
 export const initialState: ContainerState = {
   current_user: emptyUser,

@@ -5,21 +5,44 @@
  */
 import React, { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import styled from 'styled-components/macro';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
 
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 
 interface Props {
   ticket: any;
   clientSecret: string;
+  handleNext: Function;
 }
 
 const useStyles = makeStyles(theme => ({
   cardGrid: {
     marginTop: theme.spacing(3),
     marginBottom: theme.spacing(3),
+  },
+  buttonGrid: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  button: {
+    marginTop: theme.spacing(3),
+    marginLeft: theme.spacing(1),
+    width: '50%',
+    height: '40px',
+  },
+  buttonProgress: {
+    color: '#ffffff',
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
   },
 }));
 
@@ -83,6 +106,7 @@ export const PaymentForm = memo((props: Props) => {
         setError('');
         setProcessing(false);
         setSucceeded(true);
+        props.handleNext();
       }
     }
   };
@@ -93,6 +117,8 @@ export const PaymentForm = memo((props: Props) => {
         Credit/Debit Card
       </Typography>
       <Grid container spacing={3}>
+        {/* Show any error that happens when processing the payment */}
+        {error && <Error>{error}</Error>}
         <Grid item xs={12} md={12} className={classes.cardGrid}>
           <CardElement
             id="card-element"
@@ -100,7 +126,31 @@ export const PaymentForm = memo((props: Props) => {
             onChange={handleChange}
           />
         </Grid>
+        <Grid item xs={12} md={12} className={classes.buttonGrid}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSubmit}
+            className={classes.button}
+            disabled={processing || disabled || succeeded}
+          >
+            {processing ? (
+              <CircularProgress size={24} className={classes.buttonProgress} />
+            ) : (
+              'Pay'
+            )}
+          </Button>
+        </Grid>
       </Grid>
     </React.Fragment>
   );
 });
+
+const Error = styled.div`
+  color: rgb(256, 115, 134);
+  font-size: 16px;
+  line-height: 20px;
+  margin-top: 30px;
+  text-align: center;
+  width: 100%;
+`;

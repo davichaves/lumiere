@@ -1,10 +1,10 @@
 /* --- STATE --- */
-import { Movie, User } from '../HomePage/types';
+import { Movie, User, Ticket } from '../HomePage/types';
 
 export interface CheckoutPageState {
   current_user: User;
   movie: Movie;
-  ticket: object;
+  ticket: Ticket;
   client_secret: string;
 }
 
