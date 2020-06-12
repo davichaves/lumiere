@@ -79,7 +79,7 @@ export const HomePage = memo((props: Props) => {
   useInjectSaga({ key: sliceKey, saga: homePageSaga });
 
   useEffect(() => {
-    if (homePage.current_user.id === 0) {
+    if (homePage.current_user.id === 0 && Cookies.get('token') !== undefined) {
       fetch(`${BASE_URL}/users/profile`, {
         method: 'GET',
         headers: {
@@ -89,18 +89,21 @@ export const HomePage = memo((props: Props) => {
       })
         .then(resp => resp.json())
         .then(data => {
-          if (data.error) {
-            console.log(data.error);
-            // Here you should have logic to handle invalid login credentials.
-            // This assumes your Rails API will return a JSON object with a key of
-            // 'message' if there is an error
+          if (data.errors) {
+            Cookies.remove('token');
+            dispatch(
+              actions.setCurrentUser({
+                id: 0,
+                name: '',
+                email: '',
+              }),
+            );
           } else {
-            // setUser(data);
             dispatch(actions.setCurrentUser(data));
           }
         });
     }
-    if (Object.keys(homePage.movies).length === 0) {
+    if (homePage.movies.length < 1) {
       fetch(`${BASE_URL}/movies`, {
         method: 'GET',
         headers: {
